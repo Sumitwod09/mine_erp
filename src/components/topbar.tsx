@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/providers";
 import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import {
-  Bell, Search, Sun, Moon, LogOut, ChevronDown, Building2, Shield,
+  Bell, Search, Sun, Moon, LogOut, ChevronDown, Building2, Shield, Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,11 +31,14 @@ function Breadcrumb() {
   const pathname = usePathname();
   const parts = pathname.split("/").filter(Boolean);
   return (
-    <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+    <div className="flex items-center gap-1 text-sm text-muted-foreground overflow-hidden">
       {parts.map((part, i) => (
-        <span key={i} className="flex items-center gap-1.5">
-          {i > 0 && <span>/</span>}
-          <span className={cn("capitalize", i === parts.length - 1 && "text-foreground font-medium")}>
+        <span key={i} className="flex items-center gap-1 min-w-0">
+          {i > 0 && <span className="shrink-0">/</span>}
+          <span className={cn(
+            "capitalize truncate",
+            i === parts.length - 1 && "text-foreground font-medium"
+          )}>
             {part.replace(/-/g, " ")}
           </span>
         </span>
@@ -44,7 +47,11 @@ function Breadcrumb() {
   );
 }
 
-export function TopBar() {
+interface TopBarProps {
+  onMobileMenuClick: () => void;
+}
+
+export function TopBar({ onMobileMenuClick }: TopBarProps) {
   const { user, logout } = useAuth();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
@@ -56,20 +63,35 @@ export function TopBar() {
   };
 
   return (
-    <header className="h-14 border-b border-border bg-card/80 backdrop-blur-sm flex items-center px-4 gap-4 shrink-0">
+    <header className="h-14 border-b border-border bg-card/80 backdrop-blur-sm flex items-center px-3 md:px-4 gap-2 md:gap-4 shrink-0">
+      {/* Mobile hamburger */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-8 w-8 md:hidden text-muted-foreground shrink-0"
+        onClick={onMobileMenuClick}
+      >
+        <Menu className="w-5 h-5" />
+      </Button>
+
       {/* Breadcrumb */}
       <div className="flex-1 min-w-0">
         <Breadcrumb />
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-2">
-        {/* Search */}
-        <button className="hidden sm:flex items-center gap-2 rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted transition-colors">
+      <div className="flex items-center gap-1 md:gap-2">
+        {/* Search – hidden on mobile */}
+        <button className="hidden lg:flex items-center gap-2 rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted transition-colors">
           <Search className="w-3.5 h-3.5" />
           <span>Search…</span>
           <kbd className="text-[10px] bg-background border border-border rounded px-1">⌘K</kbd>
         </button>
+
+        {/* Search icon only on tablet */}
+        <Button variant="ghost" size="icon" className="hidden sm:flex lg:hidden h-8 w-8 text-muted-foreground">
+          <Search className="w-4 h-4" />
+        </Button>
 
         {/* Theme toggle */}
         <Button
@@ -91,8 +113,8 @@ export function TopBar() {
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 rounded-lg hover:bg-muted px-2 py-1.5 transition-colors">
-                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
+              <button className="flex items-center gap-2 rounded-lg hover:bg-muted px-1.5 md:px-2 py-1.5 transition-colors">
+                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center shrink-0">
                   <span className="text-[11px] font-bold text-primary-foreground">{user.name[0]}</span>
                 </div>
                 <div className="hidden sm:block text-left">
