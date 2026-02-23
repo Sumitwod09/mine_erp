@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth, useModules } from "@/lib/providers";
@@ -8,9 +8,10 @@ import { MODULES } from "@/lib/data";
 import {
   BookOpen, Package, ShoppingCart, Truck, Users, UserCheck, BarChart3,
   ChevronDown, ChevronRight, Layers, Settings, PanelLeftClose, PanelLeft,
-  LayoutDashboard,
+  LayoutDashboard, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   BookOpen, Package, ShoppingCart, Truck, Users, UserCheck, BarChart3,
@@ -19,13 +20,21 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
 interface SidebarProps {
   collapsed: boolean;
   onToggle: () => void;
+  mobileOpen: boolean;
+  onMobileClose: () => void;
 }
 
-export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
   const { user } = useAuth();
   const { activeModules, visibleFeatures } = useModules();
   const [openModules, setOpenModules] = useState<string[]>(["m1", "m3"]);
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  // Close mobile sidebar on route change
+  useEffect(() => {
+    onMobileClose();
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleModule = (id: string) => {
     setOpenModules((prev) =>
@@ -33,11 +42,15 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     );
   };
 
-  return (
+  const sidebarContent = (
     <aside
       className={cn(
-        "flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 shrink-0",
-        collapsed ? "w-16" : "w-60"
+        "flex flex-col h-full bg-sidebar border-r border-sidebar-border transition-all duration-300",
+        // Desktop: fixed width based on collapsed state
+        "md:relative md:shrink-0",
+        collapsed ? "md:w-16" : "md:w-60",
+        // Mobile: always full width within drawer
+        "w-72"
       )}
     >
       {/* Logo */}
@@ -45,17 +58,25 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center shrink-0">
           <Layers className="w-4 h-4 text-sidebar-primary-foreground" />
         </div>
-        {!collapsed && (
+        {(!collapsed || mobileOpen) && (
           <div className="min-w-0">
             <div className="text-sidebar-foreground font-bold text-sm tracking-tight leading-none">LUMIERE</div>
             <div className="text-sidebar-foreground/40 text-[10px] uppercase tracking-widest mt-0.5">ERP</div>
           </div>
         )}
+        {/* Desktop collapse toggle */}
         <button
           onClick={onToggle}
-          className="ml-auto text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors shrink-0"
+          className="ml-auto text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors shrink-0 hidden md:block"
         >
           {collapsed ? <PanelLeft className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+        </button>
+        {/* Mobile close button */}
+        <button
+          onClick={onMobileClose}
+          className="ml-auto text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors shrink-0 md:hidden"
+        >
+          <X className="w-4 h-4" />
         </button>
       </div>
 
@@ -72,11 +93,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           )}
         >
           <LayoutDashboard className="w-4 h-4 shrink-0" />
-          {!collapsed && <span>Dashboard</span>}
+          {(!collapsed || mobileOpen) && <span>Dashboard</span>}
         </Link>
 
         {/* Module separator */}
-        {!collapsed && (
+        {(!collapsed || mobileOpen) && (
           <div className="px-2 pt-3 pb-1">
             <span className="text-[10px] uppercase tracking-widest text-sidebar-foreground/30 font-medium">Modules</span>
           </div>
@@ -93,17 +114,17 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           return (
             <div key={module.id}>
               <button
-                onClick={() => !collapsed && toggleModule(module.id)}
+                onClick={() => (!collapsed || mobileOpen) && toggleModule(module.id)}
                 className={cn(
                   "w-full flex items-center gap-3 px-2 py-2 rounded-lg text-sm transition-colors group",
                   isModuleActive && !isOpen
                     ? "bg-sidebar-primary text-sidebar-primary-foreground"
                     : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 )}
-                title={collapsed ? module.name : undefined}
+                title={(collapsed && !mobileOpen) ? module.name : undefined}
               >
                 <Icon className="w-4 h-4 shrink-0" />
-                {!collapsed && (
+                {(!collapsed || mobileOpen) && (
                   <>
                     <span className="flex-1 text-left font-medium">{module.name}</span>
                     {isOpen ? (
@@ -115,7 +136,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 )}
               </button>
 
-              {!collapsed && isOpen && (
+              {(!collapsed || mobileOpen) && isOpen && (
                 <div className="ml-4 mt-0.5 mb-1 space-y-0.5 border-l border-sidebar-border pl-3">
                   {features.map((feature) => {
                     const isActive = pathname === feature.route || pathname.startsWith(feature.route + "/");
@@ -130,7 +151,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                             : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                         )}
                       >
-                        <div className={cn("w-1 h-1 rounded-full", isActive ? "bg-current" : "bg-sidebar-foreground/30")} />
+                        <div className={cn("w-1 h-1 rounded-full shrink-0", isActive ? "bg-current" : "bg-sidebar-foreground/30")} />
                         {feature.name}
                       </Link>
                     );
@@ -152,13 +173,13 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               ? "bg-sidebar-primary text-sidebar-primary-foreground"
               : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           )}
-          title={collapsed ? "Settings" : undefined}
+          title={(collapsed && !mobileOpen) ? "Settings" : undefined}
         >
           <Settings className="w-4 h-4 shrink-0" />
-          {!collapsed && <span>Settings</span>}
+          {(!collapsed || mobileOpen) && <span>Settings</span>}
         </Link>
 
-        {!collapsed && user && (
+        {(!collapsed || mobileOpen) && user && (
           <div className="flex items-center gap-2 px-2 py-2 mt-1">
             <div className="w-7 h-7 rounded-full bg-sidebar-primary flex items-center justify-center shrink-0">
               <span className="text-[10px] font-bold text-sidebar-primary-foreground">{user.name[0]}</span>
@@ -171,5 +192,41 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         )}
       </div>
     </aside>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <div className="hidden md:block h-screen shrink-0">
+        {sidebarContent}
+      </div>
+
+      {/* Mobile drawer */}
+      <div
+        className={cn(
+          "md:hidden fixed inset-0 z-50 flex transition-all duration-300",
+          mobileOpen ? "pointer-events-auto" : "pointer-events-none"
+        )}
+      >
+        {/* Backdrop */}
+        <div
+          ref={overlayRef}
+          onClick={onMobileClose}
+          className={cn(
+            "absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300",
+            mobileOpen ? "opacity-100" : "opacity-0"
+          )}
+        />
+        {/* Drawer panel */}
+        <div
+          className={cn(
+            "relative h-full transition-transform duration-300 ease-in-out",
+            mobileOpen ? "translate-x-0" : "-translate-x-full"
+          )}
+        >
+          {sidebarContent}
+        </div>
+      </div>
+    </>
   );
 }
