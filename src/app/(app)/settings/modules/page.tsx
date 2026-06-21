@@ -4,13 +4,16 @@ import { useAuth, useModules } from "@/lib/providers";
 import { MODULES } from "@/lib/data";
 import {
   BookOpen, Package, ShoppingCart, Truck, Users, UserCheck, BarChart3,
-  Layers, CheckCircle2, XCircle, Lock, Shield,
+  CheckCircle2, XCircle, Lock, Shield,
+  Calculator,
 } from "lucide-react";
+import VERPLogo from "@/components/verp-logo";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   BookOpen, Package, ShoppingCart, Truck, Users, UserCheck, BarChart3,
+  Calculator,
 };
 
 const MODULE_COLORS: Record<string, { bg: string; icon: string }> = {
@@ -95,7 +98,7 @@ export default function ModulesSettingsPage() {
       {/* Optional modules */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <Layers className="w-4 h-4 text-muted-foreground" />
+          <VERPLogo className="w-4 h-4 text-muted-foreground" />
           <h2 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">Add-on Modules</h2>
           <div className="flex-1 h-px bg-border" />
         </div>
@@ -123,7 +126,7 @@ function ModuleCard({
   onToggle: () => void;
   disabled: boolean;
 }) {
-  const Icon = ICON_MAP[module.icon] ?? Layers;
+  const Icon = ICON_MAP[module.icon];
   const colors = MODULE_COLORS[module.slug] ?? { bg: "bg-muted", icon: "text-muted-foreground" };
   const features = MODULE_FEATURES[module.slug] ?? [];
 

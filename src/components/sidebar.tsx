@@ -10,7 +10,7 @@ import {
   ChevronDown, ChevronRight, Settings, PanelLeftClose, PanelLeft,
   LayoutDashboard, X,
 } from "lucide-react";
-import { VERPLogo } from "@/components/verp-logo";
+import VERPLogo from "@/components/verp-logo";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 

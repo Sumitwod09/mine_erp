@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, AlertCircle, ChevronRight } from "lucide-react";
-import { VERPLogo } from "@/components/verp-logo";
+import VERPLogo from "@/components/verp-logo";
 
 const DEMO_ACCOUNTS = [
   { label: "Admin", email: "admin@verp.erp", password: "admin123", color: "bg-purple-500" },

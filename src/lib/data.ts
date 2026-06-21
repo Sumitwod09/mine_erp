@@ -51,10 +51,10 @@ export interface RolePermission {
 
 // ─── Modules ────────────────────────────────────────────────────────────────
 export const MODULES: Module[] = [
-  { id: "m1", name: "Accounting", slug: "accounting", icon: "BookOpen", description: "Chart of accounts, journals, ledgers, and financial statements.", is_core: true, requiredPlan: "free" },
-  { id: "m2", name: "Inventory", slug: "inventory", icon: "Package", description: "Stock management, warehouses, transfers, and valuations.", is_core: true, requiredPlan: "free" },
-  { id: "m3", name: "Sales", slug: "sales", icon: "ShoppingCart", description: "Quotations, sales orders, invoices, and customer management.", is_core: true, requiredPlan: "free" },
-  { id: "m4", name: "Purchase", slug: "purchase", icon: "Truck", description: "Purchase orders, vendor management, and receipts.", is_core: true, requiredPlan: "free" },
+  { id: "m1", name: "Accounting", slug: "accounting", icon: "BookOpen", description: "Chart of accounts, journals, ledgers, and financial statements.", is_core: true, requiredPlan: "starter" },
+  { id: "m2", name: "Inventory", slug: "inventory", icon: "Package", description: "Stock management, warehouses, transfers, and valuations.", is_core: true, requiredPlan: "starter" },
+  { id: "m3", name: "Sales", slug: "sales", icon: "ShoppingCart", description: "Quotations, sales orders, invoices, and customer management.", is_core: true, requiredPlan: "starter" },
+  { id: "m4", name: "Purchase", slug: "purchase", icon: "Truck", description: "Purchase orders, vendor management, and receipts.", is_core: true, requiredPlan: "starter" },
   { id: "m5", name: "HR & Payroll", slug: "hr", icon: "Users", description: "Employee records, attendance, leave management, and payroll.", is_core: false, requiredPlan: "pro" },
   { id: "m6", name: "CRM", slug: "crm", icon: "UserCheck", description: "Leads, opportunities, pipeline, and customer interactions.", is_core: false, requiredPlan: "pro" },
   { id: "m7", name: "Reporting", slug: "reporting", icon: "BarChart3", description: "Dashboards, analytics, and exportable reports.", is_core: false, requiredPlan: "pro" },
@@ -138,12 +138,12 @@ export const ROLE_PERMISSIONS: RolePermission[] = [
 
 // ─── Demo Users ───────────────────────────────────────────────────────────────
 export const DEMO_USERS: (User & { password: string })[] = [
-  { id: "u1", name: "Alex Johnson", email: "admin@lumiere.erp", password: "admin123", role: "admin", company_id: "c1" },
-  { id: "u2", name: "Maria Santos", email: "manager@lumiere.erp", password: "manager123", role: "manager", company_id: "c1" },
-  { id: "u3", name: "David Lee", email: "accountant@lumiere.erp", password: "acc123", role: "accountant", company_id: "c1" },
-  { id: "u4", name: "Sarah Kim", email: "sales@lumiere.erp", password: "sales123", role: "sales", company_id: "c1" },
+  { id: "u1", name: "Alex Johnson", email: "admin@verp.erp", password: "admin123", role: "admin", company_id: "c1" },
+  { id: "u2", name: "Maria Santos", email: "manager@verp.erp", password: "manager123", role: "manager", company_id: "c1" },
+  { id: "u3", name: "David Lee", email: "accountant@verp.erp", password: "acc123", role: "accountant", company_id: "c1" },
+  { id: "u4", name: "Sarah Kim", email: "sales@verp.erp", password: "sales123", role: "sales", company_id: "c1" },
 ];
 
 export const COMPANIES: Company[] = [
-  { id: "c1", name: "Lumiere Demo Co.", industry: "Retail", plan: "professional" },
+  { id: "c1", name: "VERP Demo Co.", industry: "Retail", plan: "professional" },
 ];
