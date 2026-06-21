@@ -6,19 +6,20 @@ import { useAuth } from "@/lib/providers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Layers, AlertCircle, ChevronRight } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, ChevronRight } from "lucide-react";
+import { VERPLogo } from "@/components/verp-logo";
 
 const DEMO_ACCOUNTS = [
-  { label: "Admin", email: "admin@lumiere.erp", password: "admin123", color: "bg-purple-500" },
-  { label: "Manager", email: "manager@lumiere.erp", password: "manager123", color: "bg-blue-500" },
-  { label: "Accountant", email: "accountant@lumiere.erp", password: "acc123", color: "bg-emerald-500" },
-  { label: "Sales", email: "sales@lumiere.erp", password: "sales123", color: "bg-orange-500" },
+  { label: "Admin", email: "admin@verp.erp", password: "admin123", color: "bg-purple-500" },
+  { label: "Manager", email: "manager@verp.erp", password: "manager123", color: "bg-blue-500" },
+  { label: "Accountant", email: "accountant@verp.erp", password: "acc123", color: "bg-emerald-500" },
+  { label: "Sales", email: "sales@verp.erp", password: "sales123", color: "bg-orange-500" },
 ];
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
-  const [email, setEmail] = useState("admin@lumiere.erp");
+  const [email, setEmail] = useState("admin@verp.erp");
   const [password, setPassword] = useState("admin123");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -59,10 +60,10 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="relative flex items-center gap-3">
           <div className="w-10 h-10 bg-sidebar-primary rounded-xl flex items-center justify-center shadow-lg">
-            <Layers className="w-5 h-5 text-sidebar-primary-foreground" />
+            <VERPLogo className="w-5 h-5 text-sidebar-primary-foreground" />
           </div>
           <div>
-            <div className="text-sidebar-foreground font-bold text-xl tracking-tight">LUMIERE</div>
+            <div className="text-sidebar-foreground font-bold text-xl tracking-tight">VERP</div>
             <div className="text-sidebar-foreground/50 text-xs uppercase tracking-widest">Enterprise ERP</div>
           </div>
         </div>
@@ -92,7 +93,7 @@ export default function LoginPage() {
         </div>
 
         <div className="relative text-sidebar-foreground/30 text-sm">
-          © 2026 Lumiere ERP. All rights reserved.
+          © 2026 VERP ERP. All rights reserved.
         </div>
       </div>
 
@@ -102,9 +103,9 @@ export default function LoginPage() {
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-3 mb-8">
             <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center">
-              <Layers className="w-4 h-4 text-primary-foreground" />
+              <VERPLogo className="w-4 h-4 text-primary-foreground" />
             </div>
-            <span className="font-bold text-lg">LUMIERE ERP</span>
+            <span className="font-bold text-lg">VERP ERP</span>
           </div>
 
           <div>

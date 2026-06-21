@@ -7,9 +7,10 @@ import { useAuth, useModules } from "@/lib/providers";
 import { MODULES } from "@/lib/data";
 import {
   BookOpen, Package, ShoppingCart, Truck, Users, UserCheck, BarChart3,
-  ChevronDown, ChevronRight, Layers, Settings, PanelLeftClose, PanelLeft,
+  ChevronDown, ChevronRight, Settings, PanelLeftClose, PanelLeft,
   LayoutDashboard, X,
 } from "lucide-react";
+import { VERPLogo } from "@/components/verp-logo";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -56,11 +57,11 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
       {/* Logo */}
       <div className="flex items-center gap-3 px-3 h-14 border-b border-sidebar-border shrink-0">
         <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center shrink-0">
-          <Layers className="w-4 h-4 text-sidebar-primary-foreground" />
+          <VERPLogo className="w-4 h-4" />
         </div>
         {(!collapsed || mobileOpen) && (
           <div className="min-w-0">
-            <div className="text-sidebar-foreground font-bold text-sm tracking-tight leading-none">LUMIERE</div>
+            <div className="text-sidebar-foreground font-bold text-sm tracking-tight leading-none">VERP</div>
             <div className="text-sidebar-foreground/40 text-[10px] uppercase tracking-widest mt-0.5">ERP</div>
           </div>
         )}

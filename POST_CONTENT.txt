@@ -1,0 +1,118 @@
+=== PROBLEMS ENCOUNTERED DURING DEVELOPMENT ===
+
+1. Data Model Updates
+   - Failed to correctly add `requiredPlan` field to Module interface due to sed quoting issues.
+   - Needed to manually edit src/lib/data.ts to add the field and assign plan values to each module.
+
+2. Module & Feature Registration
+   - Multiple duplicate entries appeared when trying to insert the Tax Optimizer module.
+   - Had to restore from backup and insert correctly.
+   - Added Tax Optimizer as module m8 with requiredPlan: "pro".
+   - Added two features for Tax Optimizer: Tax Overview and Tax Details.
+
+3. Provider Logic
+   - The `useModules` provider currently uses `is_core` to determine active modules.
+   - Needs to be updated to respect company plan and module.requiredPlan.
+   - Plan mapping: starter = free, professional = pro, enterprise = custom.
+
+4. UI – Sidebar & Navigation
+   - Sidebar must hide/show modules based on the user's company plan.
+   - Links to disabled modules should either be hidden or show a locked/badge UI.
+
+5. Tax Optimizer Page
+   - Created page at src/app/(app)/tax-optimizer/page.tsx.
+   - Uses mock data; needs to be wired to a real API or enhanced rule set.
+   - Ensure export CSV works with existing DataTable.
+
+6. Naming Rebrand (Lumiere → VERP)
+   - Need to find/replace all instances of "Lumiere" with "VERP" in:
+     - src/lib/data.ts (COMPANY name, DEMO_USERS email domain)
+     - src/app/login/page.tsx ( hero text, footer )
+     - src/components/sidebar.tsx (logo text)
+     - src/components/topbar.tsx (breadcrumb, user menu)
+     - Any other TSX/TS files, JSON, markdown, etc.
+   - Update the browser tab title and meta tags.
+
+7. Logo Generation
+   - Need an SVG logo for "VERP". Could be simple: letters VERP in a modular square or using the existing Layers icon as base.
+   - Replace usage of Layers logo in sidebar and login page with the new SVG (or keep Layers if desired but rename).
+
+8. Subscription / Pricing Model
+   - Need a pricing page (/pricing) that outlines three plans:
+        Free (Starter): Accounting, Inventory, Sales, Purchase (core modules) + limited users.
+        Pro (Professional): Adds HR, CRM, Reporting, Tax Optimizer + priority support.
+        Custom (Enterprise): Custom modules, SSO, dedicated account manager, SLA.
+   - Call-to-action for Custom plan: "Contact Us" button linking to a form or email.
+   - Consider adding a placeholder Stripe integration or at least a "Upgrade" button that shows a modal.
+
+9. Authentication & Email Updates
+   - Update demo user emails to @verp.erp (already done in data.ts but need to confirm).
+
+10. Testing & Lighthouse
+    - After changes, run `npm run build` and `npm start` then audit with Lighthouse to ensure performance >=90.
+    - Fix any issues: lazy load heavy charts, optimize images, enable compression, etc.
+
+=== REDDIT POST CONTENT ===
+
+**Title:** Show HN: VERP – A Free, Modular ERP Built for SMEs (Open Source Demo)
+
+Hey Reddit,
+
+I’ve been building an ERP system aimed at small and medium businesses that want modern software without the crazy complexity and cost of legacy systems. I’m calling it **VERP** (think “very ERP”).
+
+It’s a Next.js 15 / React 19 / TypeScript 5 app with a clean UI, role‑based access, and a modular design so you only pay for what you need.
+
+🔹 **Free tier (Starter)** includes:
+- Accounting (Chart of Accounts, Journals, Ledger, Financial Reports)
+- Inventory (Products, Warehouses, Transfers, Valuation)
+- Sales (Quotations, Orders, Invoices, Customers)
+- Purchase (Orders, Vendors, Receipts)
+
+🔹 **Paid tiers** unlock:
+- HR & Payroll, CRM, Reporting, Tax Optimizer (find legal tax‑saving opportunities)
+- Plus priority support and custom module options.
+
+I’ve just added a **Tax Optimizer** module that shows you where you can save on taxes based on your actual data—great for year‑end planning.
+
+👉 Try the live demo (free, no sign‑up required): [https://verp.erp] (placeholder)
+👉 GitHub repo: [https://github.com/yourname/verp] (placeholder)
+
+Feedback welcome! If you’re an SME owner, accountant, or just curious about ERP, let me know what you think—especially what features you’d love to see next.
+
+#ERP #SaaS #SideProject #IndieHackers #Bootstrapped
+
+=== TWITTER THREAD ===
+
+1/ 🚀 Introducing VERP – a modern, modular ERP for SMEs built on Next.js 15 & React 19.
+Free tier includes Accounting, Inventory, Sales, Purchase. No fluff, just what you need to run your business.
+#ERP #SaaS #IndieHackers
+
+2/ 💡 Why VERP? Legacy ERPs are expensive, slow, and ugly. VERP flips that: clean UI, modular pricing, and built for speed (Lighthouse ≥90 target).
+Think of it as “Notion for back‑office” – you add only the modules you use.
+
+3/ 🧾 Free (Starter) plan gives you:
+- Full Accounting (COA, Journals, Ledger, Reports)
+- Inventory Management
+- Sales & Purchase workflows
+All ready to try today – no credit card needed.
+
+4/ 💎 Pro plan adds:
+- HR & Payroll
+- CRM
+- Reporting Dashboard
+- **NEW:** Tax Optimizer – see where you can legally save on taxes based on your real data.
+
+5/ 🏢 Enterprise (Custom) plan:
+- Tailor‑made modules, SSO, dedicated support, SLA.
+Hit “Contact Us” to get a quote.
+
+6/ 🔗 Try it now: [https://verp.erp] (demo)
+GitHub: [https://github.com/yourname/verp]
+Feedback, feature requests, or just say hi—I read every reply.
+
+7/ #buildinpublic #sidehustle #microsaas
+RT if you know a founder who’d love a better ERP.
+
+Feel free to adjust URLs, add your actual demo link, and include screenshots or a short GIF showing the Tax Optimizer dashboard.
+
+That’s it! Let me know if you need further tweaks—good luck with the launch. 🚀

@@ -25,6 +25,7 @@ export interface Module {
   icon: string;
   description: string;
   is_core: boolean;
+  requiredPlan?: "free" | "pro" | "custom";
 }
 
 export interface Feature {
@@ -50,13 +51,14 @@ export interface RolePermission {
 
 // ─── Modules ────────────────────────────────────────────────────────────────
 export const MODULES: Module[] = [
-  { id: "m1", name: "Accounting", slug: "accounting", icon: "BookOpen", description: "Chart of accounts, journals, ledgers, and financial statements.", is_core: true },
-  { id: "m2", name: "Inventory", slug: "inventory", icon: "Package", description: "Stock management, warehouses, transfers, and valuations.", is_core: true },
-  { id: "m3", name: "Sales", slug: "sales", icon: "ShoppingCart", description: "Quotations, sales orders, invoices, and customer management.", is_core: true },
-  { id: "m4", name: "Purchase", slug: "purchase", icon: "Truck", description: "Purchase orders, vendor management, and receipts.", is_core: true },
-  { id: "m5", name: "HR & Payroll", slug: "hr", icon: "Users", description: "Employee records, attendance, leave management, and payroll.", is_core: false },
-  { id: "m6", name: "CRM", slug: "crm", icon: "UserCheck", description: "Leads, opportunities, pipeline, and customer interactions.", is_core: false },
-  { id: "m7", name: "Reporting", slug: "reporting", icon: "BarChart3", description: "Dashboards, analytics, and exportable reports.", is_core: false },
+  { id: "m1", name: "Accounting", slug: "accounting", icon: "BookOpen", description: "Chart of accounts, journals, ledgers, and financial statements.", is_core: true, requiredPlan: "free" },
+  { id: "m2", name: "Inventory", slug: "inventory", icon: "Package", description: "Stock management, warehouses, transfers, and valuations.", is_core: true, requiredPlan: "free" },
+  { id: "m3", name: "Sales", slug: "sales", icon: "ShoppingCart", description: "Quotations, sales orders, invoices, and customer management.", is_core: true, requiredPlan: "free" },
+  { id: "m4", name: "Purchase", slug: "purchase", icon: "Truck", description: "Purchase orders, vendor management, and receipts.", is_core: true, requiredPlan: "free" },
+  { id: "m5", name: "HR & Payroll", slug: "hr", icon: "Users", description: "Employee records, attendance, leave management, and payroll.", is_core: false, requiredPlan: "pro" },
+  { id: "m6", name: "CRM", slug: "crm", icon: "UserCheck", description: "Leads, opportunities, pipeline, and customer interactions.", is_core: false, requiredPlan: "pro" },
+  { id: "m7", name: "Reporting", slug: "reporting", icon: "BarChart3", description: "Dashboards, analytics, and exportable reports.", is_core: false, requiredPlan: "pro" },
+  { id: "m8", name: "Tax Optimizer", slug: "tax-optimizer", icon: "Calculator", description: "Find legal ways to reduce your tax bill.", is_core: false, requiredPlan: "pro" }
 ];
 
 // ─── Features ────────────────────────────────────────────────────────────────
