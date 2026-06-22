@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import type { User, Role } from "@/lib/data";
+import type { User, Role, Company } from "@/lib/data";
 import {
   DEMO_USERS,
   MODULES,
@@ -43,15 +43,37 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [companyModules, setCompanyModules] = useState<CompanyModule[]>([]);
 
+  // Effect to sync user state from verp_user cookie (non-httpOnly)
   useEffect(() => {
-    const storedUser = localStorage.getItem("verp_user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch {
-        // ignore
+    const updateUserFromCookie = () => {
+      const userCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('verp_user='))
+        ?.split('=')[1];
+
+      let parsedUser = null;
+      if (userCookie) {
+        try {
+          parsedUser = JSON.parse(decodeURIComponent(userCookie));
+        } catch {
+          parsedUser = null;
+        }
       }
-    }
+
+      if (JSON.stringify(user) !== JSON.stringify(parsedUser)) {
+        setUser(parsedUser);
+      }
+    };
+
+    // Check cookie on mount
+    updateUserFromCookie();
+
+    // Set up interval to check for changes (since we can't listen to cookie changes directly)
+    const interval = setInterval(updateUserFromCookie, 1000);
+    return () => clearInterval(interval);
+  }, [user]);
+
+  useEffect(() => {
     const storedModules = localStorage.getItem("verp_modules");
     if (storedModules) {
       try {
@@ -68,13 +90,17 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     if (!found) return false;
     const { password: _, ...userWithoutPassword } = found;
     setUser(userWithoutPassword);
-    localStorage.setItem("verp_user", JSON.stringify(userWithoutPassword));
+    // Set cookie for client state (non-httpOnly)
+    document.cookie = `verp_user=${encodeURIComponent(
+      JSON.stringify(userWithoutPassword)
+    )}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
     return true;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("verp_user");
+    // Remove verp_user cookie
+    document.cookie = "verp_user=; Max-Age=0; Path=/;";
     localStorage.removeItem("verp_modules");
   };
 
